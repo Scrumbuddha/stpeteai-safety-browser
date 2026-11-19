@@ -82,7 +82,7 @@
     });
     wv.addEventListener('did-stop-loading', () => {
       tab.loading = false; tab.progress = 100; clearInterval(timer);
-      renderTab(tab); if (tab === active) { syncChrome(); tachBlip(); }
+      renderTab(tab); if (tab === active) syncChrome();
     });
     wv.addEventListener('page-title-updated', (e) => {
       tab.title = e.title; renderTab(tab);
@@ -193,7 +193,6 @@
     const name = isHome(t.url) ? '' : (t.title || hostOf(t.url));
     $('#title-text').textContent = name ? `${name} — St. Pete AI Safety Browser` : 'St. Pete AI Safety Browser';
     document.title = $('#title-text').textContent;
-    tachTarget = t.loading ? 6.5 : 1;
   }
 
   function navigate(input) {
@@ -627,53 +626,6 @@
   $('#find-next').onclick = () => find(true);
   $('#find-prev').onclick = () => find(false);
   $('#find-close').onclick = closeFind;
-
-  // ---------------------------------------------------------------- emblem sprocket + tachometer
-  const NS = 'http://www.w3.org/2000/svg';
-  const mk = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
-
-  const teeth = document.getElementById('teeth');
-  for (let i = 0; teeth && i < 28; i++) {
-    teeth.appendChild(mk('rect', { x: 56.5, y: 1, width: 7, height: 8, rx: 1.5, transform: `rotate(${(360 / 28) * i} 60 60)` }));
-  }
-
-  const MAX = 8, A0 = -125, A1 = 125;
-  const angleFor = (v) => A0 + (A1 - A0) * (v / MAX);
-  const ticks = $('#tach-ticks');
-  for (let v = 0; v <= MAX; v += 0.5) {
-    const a = (angleFor(v) - 90) * Math.PI / 180, major = v % 1 === 0, red = v >= 6.5;
-    const r1 = 68, r2 = major ? 57 : 62;
-    ticks.appendChild(mk('line', { x1: 100 + r1 * Math.cos(a), y1: 95 + r1 * Math.sin(a), x2: 100 + r2 * Math.cos(a), y2: 95 + r2 * Math.sin(a),
-      stroke: red ? '#ff3b1d' : '#e8e8e8', 'stroke-width': major ? 2.4 : 1.2 }));
-    if (major) {
-      const t = mk('text', { x: 100 + 47 * Math.cos(a), y: 95 + 47 * Math.sin(a), class: 'tick-num' });
-      if (red) t.setAttribute('style', 'fill:#ff5a30');
-      t.textContent = v; ticks.appendChild(t);
-    }
-  }
-  // redline arc
-  const arc = (v0, v1, r) => {
-    const p = (v) => { const a = (angleFor(v) - 90) * Math.PI / 180; return [100 + r * Math.cos(a), 95 + r * Math.sin(a)]; };
-    const [x0, y0] = p(v0), [x1, y1] = p(v1);
-    return `M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}`;
-  };
-  ticks.prepend(mk('path', { d: arc(6.5, 8, 66), stroke: '#c4200c', 'stroke-width': 5, fill: 'none', opacity: '.8' }));
-
-  let tachTarget = 1, tachValue = 1, blip = 0;
-  function tachBlip() { blip = 2.2; }
-  setInterval(() => {
-    const jitter = active && active.loading ? (Math.random() - 0.5) * 0.9 : (Math.random() - 0.5) * 0.08;
-    tachValue = tachTarget + jitter + blip;
-    blip *= 0.5;
-    $('#needle').style.transform = `rotate(${angleFor(Math.min(MAX, Math.max(0, tachValue)))}deg)`;
-    $('#tach-state').textContent = active && active.loading ? 'Pulling…' : 'Idle';
-  }, 350);
-
-  function tickClock() {
-    const d = new Date();
-    $('#tach-clock').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-  tickClock(); setInterval(tickClock, 5000);
 
   // ---------------------------------------------------------------- boot
   renderFavs();

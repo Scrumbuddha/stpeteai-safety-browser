@@ -124,26 +124,6 @@
     </section>
 
     <aside id="sidebar">
-      <div class="panel gauge-panel">
-        <svg id="tach" viewBox="0 0 200 170" aria-label="Load tachometer and clock">
-          <defs>
-            <radialGradient id="tach-face" cx="50%" cy="45%" r="60%">
-              <stop offset="0" stop-color="#2b2b2b"/><stop offset="1" stop-color="#050505"/>
-            </radialGradient>
-            <linearGradient id="tach-bezel" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#f1f2f4"/><stop offset=".5" stop-color="#6d7178"/><stop offset="1" stop-color="#d9dbde"/>
-            </linearGradient>
-          </defs>
-          <circle cx="100" cy="95" r="78" fill="url(#tach-bezel)"/>
-          <circle cx="100" cy="95" r="71" fill="url(#tach-face)"/>
-          <g id="tach-ticks"></g>
-          <text x="100" y="62" class="tach-label">x1000 r/min</text>
-          <g id="needle"><path d="M100 95 L100 34" stroke="#5fd0f3" stroke-width="3" stroke-linecap="round"/></g>
-          <circle cx="100" cy="95" r="8" fill="url(#tach-bezel)"/>
-          <text id="tach-clock" x="100" y="136" class="tach-clock">00:00</text>
-          <text id="tach-state" x="100" y="149" class="tach-label">IDLE</text>
-        </svg>
-      </div>
 
       <div class="panel" id="safety-panel" data-level="home">
         <div class="safety-head">

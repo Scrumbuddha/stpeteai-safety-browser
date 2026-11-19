@@ -1,7 +1,7 @@
 {
     "name": "stpeteai-safety-browser",
     "productName": "St. Pete AI Safety Browser",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "St. Pete AI Safety Browser - a scam-resistant Chromium browser",
     "main": "main.js",
     "author": "St. Pete AI",

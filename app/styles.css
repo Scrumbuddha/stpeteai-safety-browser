@@ -41,7 +41,6 @@ svg { display: block; }
 #top .tb span, #addressrow label, .menu { text-shadow: 0 1px 2px #0d1020, 0 0 4px #0d1020; }
 #top #addressrow label { color: #dfe5f3; font-weight: 500; }
 #sidebar .panel { background: rgba(29,34,56,.62); backdrop-filter: blur(3px); border-color: rgba(95,208,243,.16); }
-#sidebar .gauge-panel { background: rgba(29,34,56,.2); }
 #sidebar .panel.grow { background: linear-gradient(rgba(29,34,56,.7), rgba(29,34,56,.12)); }
 #sidebar li { border-bottom-color: rgba(95,208,243,.1); text-shadow: 0 1px 2px #0d1020; }
 
@@ -147,12 +146,6 @@ svg { display: block; }
   box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 1px 0 rgba(255,255,255,.05); }
 .panel.grow { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .panel h3 { margin: 0 0 6px; font: 800 12px Roboto, sans-serif; letter-spacing: 1.6px; color: var(--orange); text-transform: uppercase; }
-.gauge-panel { padding: 4px; }
-#tach { width: 100%; }
-.tach-label { font: 500 7px Roboto, sans-serif; letter-spacing: 1px; fill: #8d8f94; text-anchor: middle; text-transform: uppercase; }
-.tach-clock { font: 700 14px Roboto, sans-serif; fill: var(--orange); text-anchor: middle; }
-.tick-num { font: 700 10px Roboto, sans-serif; fill: #e8e8e8; text-anchor: middle; dominant-baseline: middle; }
-#needle { transform-origin: 100px 95px; transition: transform .45s cubic-bezier(.3,1.6,.5,1); }
 
 #side-search { display: flex; gap: 4px; }
 #side-search input { flex: 1; min-width: 0; height: 24px; border: 1px solid #000; border-radius: 3px; padding: 0 6px; user-select: text; }
