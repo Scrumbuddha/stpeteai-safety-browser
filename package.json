@@ -47,7 +47,7 @@
             "createDesktopShortcut": true,
             "createStartMenuShortcut": true,
             "shortcutName": "St. Pete AI Safety Browser",
-            "artifactName": "StPeteAI-Safety-Browser-Setup-${version}.exe",
+            "artifactName": "StPeteAI-Safety-Browser-Setup.exe",
             "runAfterFinish": true
         },
         "portable": {
