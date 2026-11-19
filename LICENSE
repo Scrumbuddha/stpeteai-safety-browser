@@ -1,0 +1,42 @@
+St. Pete AI Safety Browser
+
+SOURCE CODE
+
+ISC License
+
+Copyright (c) 2026 St. Pete AI
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+NO PROTECTION IS PERFECT
+
+The Safety Browser reduces the risk of common online scams. It cannot
+detect every scam, fake website or harmful download, and it may sometimes
+warn about a safe page. Always use your own judgment.
+
+BRAND ASSETS (NOT COVERED BY THE LICENSE ABOVE)
+
+The St. Pete AI name, the heron logo (app/logo.png, app/favicon.png,
+build/icon.png) and the background artwork (app/chrome-bg.jpg) are
+owned by St. Pete AI and its contributors. All rights reserved. If you
+distribute a modified version, replace them with your own.
+
+THIRD-PARTY COMPONENTS
+
+- Roboto font (app/fonts/): Copyright Google LLC, SIL Open Font License 1.1.
+- Electron and Chromium: MIT and BSD-style licenses. Their full notices
+  ship with the installed program (LICENSE.electron.txt and
+  LICENSES.chromium.html in the install folder).
+- electron-updater: MIT License.
+- Known-phishing list: OpenPhish community feed (openphish.com), downloaded
+  at run time and used under OpenPhish's terms for its free feed.

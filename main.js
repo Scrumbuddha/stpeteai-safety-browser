@@ -189,6 +189,33 @@ function startFeed() {
 
 ipcMain.handle('phish-feed', () => withTestEntries(phishFeed));
 
+// ---------------------------------------------------------------- automatic updates
+// New versions come from GitHub Releases (see "publish" in package.json). They download quietly
+// in the background and install when the browser is closed, or right away if the person clicks
+// "Restart now". Only the installed app updates itself; dev and test runs never do.
+let pendingUpdate = null;
+function startAutoUpdates() {
+  if (!app.isPackaged || process.env.IRONROAD_SHOT) return;
+  let autoUpdater;
+  try { ({ autoUpdater } = require('electron-updater')); } catch (err) {
+    console.log('[update] updater unavailable: ' + err.message); return;
+  }
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.allowPrerelease = false;
+  autoUpdater.on('update-downloaded', (info) => {
+    pendingUpdate = { version: info.version };
+    if (win && !win.isDestroyed()) win.webContents.send('update-ready', pendingUpdate);
+  });
+  autoUpdater.on('error', (err) => console.log('[update] ' + (err && err.message)));
+  const check = () => autoUpdater.checkForUpdates().catch((err) => console.log('[update] check failed: ' + err.message));
+  setTimeout(check, 30 * 1000);
+  setInterval(check, 6 * 60 * 60 * 1000);
+  ipcMain.on('update-restart', () => { if (pendingUpdate) autoUpdater.quitAndInstall(false, true); });
+}
+ipcMain.handle('update-status', () => pendingUpdate);
+ipcMain.handle('app-version', () => app.getVersion());
+
 // ---------------------------------------------------------------- domain age (RDAP)
 const ageCache = new Map();
 ipcMain.handle('domain-age', async (_e, domain) => {
@@ -253,5 +280,6 @@ app.whenReady().then(() => {
   guardDownloads(session.defaultSession);
   startFeed();
   createWindow();
+  startAutoUpdates();
 });
 app.on('window-all-closed', () => app.quit());

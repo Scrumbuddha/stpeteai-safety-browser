@@ -678,6 +678,17 @@
   // ---------------------------------------------------------------- boot
   renderFavs();
   renderHistory();
+  // Version label and "update ready" button.
+  api.appVersion().then((v) => { $('#app-version').textContent = 'v' + v; });
+  const showUpdate = (info) => {
+    if (!info) return;
+    $('#update-btn').textContent = `Update ${info.version} ready: restart now`;
+    $('#update-btn').hidden = false;
+  };
+  api.onUpdateReady(showUpdate);
+  api.updateStatus().then(showUpdate);
+  $('#update-btn').onclick = () => api.restartToUpdate();
+
   api.onPhishFeed(setPhishFeed);
   api.phishFeed().then(setPhishFeed);
   createTab(HOME);

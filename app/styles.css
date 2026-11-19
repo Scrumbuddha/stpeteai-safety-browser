@@ -189,6 +189,11 @@ div.ptab-body:not([hidden]) { display: flex; flex-direction: column; gap: 6px; }
 #status.busy #progress { visibility: visible; }
 #progress div { height: 100%; width: 0; background: repeating-linear-gradient(45deg, var(--orange) 0 6px, var(--blue) 6px 12px);
   transition: width .3s; }
+#update-btn { height: 18px; padding: 0 10px; border: 0; border-radius: 9px; font: 700 11px Roboto, sans-serif; color: var(--navy);
+  background: linear-gradient(var(--orange-hi), var(--orange)); box-shadow: 0 0 8px rgba(95,208,243,.6); }
+#update-btn[hidden] { display: none; }
+#update-btn:hover { filter: brightness(1.1); }
+#app-version { padding: 0 8px; color: var(--muted); }
 #zoom-level, #zone { padding: 0 8px; border-left: 1px solid #3a4468; }
 
 /* ---------- Menus ---------- */
