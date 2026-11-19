@@ -42,8 +42,15 @@ function createWindow() {
     }, Number(process.env.IRONROAD_SHOT_DELAY || 4000) - 2000);
   }
   if (process.env.IRONROAD_SHOT) {
-    win.webContents.on('console-message', (_e, level, message, line, source) =>
-      console.log(`[renderer:${level}] ${message} (${source}:${line})`));
+    // Electron 35+ passes one event object; older versions passed (event, level, message, line, source).
+    win.webContents.on('console-message', (e, ...legacy) => {
+      const level = e.level !== undefined ? e.level : legacy[0];
+      const message = e.message !== undefined ? e.message : legacy[1];
+      const line = e.lineNumber !== undefined ? e.lineNumber : legacy[2];
+      const source = e.sourceId !== undefined ? e.sourceId : legacy[3];
+      const lvl = level === 'error' || level === 3 ? 3 : level === 'warning' || level === 2 ? 2 : level;
+      console.log(`[renderer:${lvl}] ${message} (${source}:${line})`);
+    });
     setTimeout(async () => {
       const img = await win.capturePage();
       require('fs').writeFileSync(process.env.IRONROAD_SHOT, img.toPNG());
@@ -204,10 +211,33 @@ ipcMain.handle('domain-age', async (_e, domain) => {
 // Screenshot test runs get a throwaway profile so they never collide with a running copy.
 if (process.env.IRONROAD_SHOT) app.setPath('userData', path.join(app.getPath('temp'), 'ironroad-test-profile'));
 else {
-  // Keep using the original "Iron Road" profile folder after the rename, so favorites,
-  // history, notes, sign-ins and the cached phishing list carry over.
-  app.setPath('userData', path.join(app.getPath('appData'), 'Iron Road'));
+  migrateOldProfile();
   if (!app.requestSingleInstanceLock()) app.quit();
+}
+
+// One-time move from the original "Iron Road" profile folder to the app's own folder,
+// so favorites, history, notes, sign-ins and the cached phishing list carry over.
+// The old folder is left in place as a backup.
+function migrateOldProfile() {
+  const fs = require('fs');
+  const newDir = app.getPath('userData'); // %APPDATA%\St. Pete AI Safety Browser
+  const oldDir = path.join(app.getPath('appData'), 'Iron Road');
+  const marker = path.join(newDir, 'migrated-from-iron-road.txt');
+  // Electron may create newDir before this runs, so "folder exists" is not proof of a finished move.
+  // Use a marker file, and treat a profile that already has saved pages/favorites as already in use.
+  if (!fs.existsSync(oldDir) || fs.existsSync(marker)) return;
+  if (fs.existsSync(path.join(newDir, 'Local Storage'))) {
+    try { fs.writeFileSync(marker, 'skipped: new profile already in use\n'); } catch (_) {}
+    return;
+  }
+  const skip = new Set(['Cache', 'Code Cache', 'GPUCache', 'DawnGraphiteCache', 'DawnWebGPUCache', 'ShaderCache',
+    'GrShaderCache', 'Crashpad', 'blob_storage', 'SingletonLock', 'SingletonCookie', 'SingletonSocket', 'lockfile', 'LOCK']);
+  try {
+    fs.cpSync(oldDir, newDir, { recursive: true, force: true, filter: (src) => !skip.has(path.basename(src)) });
+    fs.writeFileSync(marker, `copied from ${oldDir} on ${new Date().toISOString()}\n`);
+  } catch (err) {
+    console.log('[migrate] could not copy old profile: ' + err.message);
+  }
 }
 app.on('second-instance', (_e, argv) => {
   if (!win) return;
@@ -217,7 +247,7 @@ app.on('second-instance', (_e, argv) => {
   if (url) win.webContents.send('open-tab', url);
 });
 
-app.setAppUserModelId('local.ironroad.browser');
+app.setAppUserModelId('org.stpeteai.safetybrowser');
 app.whenReady().then(() => {
   guardDownloads(session.fromPartition('persist:ironroad'));
   guardDownloads(session.defaultSession);

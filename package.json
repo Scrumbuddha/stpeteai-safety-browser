@@ -16,11 +16,21 @@
         "dist:portable": "electron-builder --win portable"
     },
     "build": {
-        "appId": "local.ironroad.browser",
+        "appId": "org.stpeteai.safetybrowser",
         "productName": "St. Pete AI Safety Browser",
-        "directories": { "output": "dist", "buildResources": "build" },
-        "files": ["main.js", "preload.js", "app/**/*", "build/icon.png"],
-        "win": { "icon": "build/icon.png" },
+        "directories": {
+            "output": "dist",
+            "buildResources": "build"
+        },
+        "files": [
+            "main.js",
+            "preload.js",
+            "app/**/*",
+            "build/icon.png"
+        ],
+        "win": {
+            "icon": "build/icon.png"
+        },
         "nsis": {
             "oneClick": false,
             "perMachine": false,
@@ -30,13 +40,15 @@
             "shortcutName": "St. Pete AI Safety Browser",
             "runAfterFinish": true
         },
-        "portable": { "artifactName": "StPeteAI-Safety-Browser-Portable-${version}.exe" }
+        "portable": {
+            "artifactName": "StPeteAI-Safety-Browser-Portable-${version}.exe"
+        }
     },
     "devDependencies": {
-        "electron": "^33.2.1",
-        "electron-builder": "^25.1.8"
+        "electron": "45.2.3",
+        "electron-builder": "26.18.0"
     },
     "allowScripts": {
-        "electron@33.2.1": true
+        "electron@45.2.3": true
     }
 }
