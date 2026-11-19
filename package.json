@@ -1,0 +1,42 @@
+{
+    "name": "iron-road-browser",
+    "productName": "St. Pete AI Safety Browser",
+    "version": "1.0.0",
+    "description": "St. Pete AI Safety Browser - a scam-resistant Chromium browser",
+    "main": "main.js",
+    "author": "St. Pete AI",
+    "license": "ISC",
+    "type": "commonjs",
+    "scripts": {
+        "start": "launch.cmd",
+        "test": "node --test test/safety-core.test.js",
+        "scam-pages": "node test/scam-fixtures-server.js",
+        "icon": "electron tools/make-icon.js",
+        "dist": "electron-builder --win nsis",
+        "dist:portable": "electron-builder --win portable"
+    },
+    "build": {
+        "appId": "local.ironroad.browser",
+        "productName": "St. Pete AI Safety Browser",
+        "directories": { "output": "dist", "buildResources": "build" },
+        "files": ["main.js", "preload.js", "app/**/*", "build/icon.png"],
+        "win": { "icon": "build/icon.png" },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "St. Pete AI Safety Browser",
+            "runAfterFinish": true
+        },
+        "portable": { "artifactName": "StPeteAI-Safety-Browser-Portable-${version}.exe" }
+    },
+    "devDependencies": {
+        "electron": "^33.2.1",
+        "electron-builder": "^25.1.8"
+    },
+    "allowScripts": {
+        "electron@33.2.1": true
+    }
+}

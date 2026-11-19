@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; script-src 'self'">
+<title>St. Pete AI Safety Browser</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="frame">
+
+  <!-- Round emblem that overhangs the chrome, like the original skin -->
+  <div id="emblem" title="Home">
+    <img src="logo.png" alt="" draggable="false">
+    <svg viewBox="0 0 120 120" aria-hidden="true" hidden>
+      <defs>
+        <radialGradient id="eg-chrome" cx="40%" cy="30%" r="75%">
+          <stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#b9bcc2"/>
+          <stop offset=".7" stop-color="#4b4e55"/><stop offset="1" stop-color="#d6d8dc"/>
+        </radialGradient>
+        <linearGradient id="eg-orange" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ff9a3c"/><stop offset="1" stop-color="#c94a06"/>
+        </linearGradient>
+        <path id="eg-arc" d="M22 60 A38 38 0 0 1 98 60"/>
+      </defs>
+      <!-- sprocket ring -->
+      <g fill="url(#eg-chrome)">
+        <circle cx="60" cy="60" r="54"/>
+        <g id="teeth"></g>
+      </g>
+      <circle cx="60" cy="60" r="47" fill="#0c0c0c" stroke="#5a5d63" stroke-width="1.5"/>
+      <!-- wings -->
+      <g fill="url(#eg-chrome)" opacity=".95">
+        <path d="M60 64 L18 50 L24 56 L14 56 L24 62 L16 64 L28 68 L22 71 L40 72 Z"/>
+        <path d="M60 64 L102 50 L96 56 L106 56 L96 62 L104 64 L92 68 L98 71 L80 72 Z"/>
+      </g>
+      <!-- shield -->
+      <path d="M44 46 H76 V66 Q76 80 60 88 Q44 80 44 66 Z" fill="url(#eg-orange)" stroke="#fff" stroke-width="2"/>
+      <path d="M52 52 H68 M60 52 V80" stroke="#111" stroke-width="5" stroke-linecap="square"/>
+      <text font-family="Impact, 'Arial Black', sans-serif" font-size="11" letter-spacing="2" fill="#ff8a2a">
+        <textPath href="#eg-arc" startOffset="50%" text-anchor="middle">IRON ROAD</textPath>
+      </text>
+      <text x="60" y="101" font-family="Impact, 'Arial Black', sans-serif" font-size="7" letter-spacing="1.5" fill="#cfd2d6" text-anchor="middle">EST. BROWSER</text>
+    </svg>
+  </div>
+
+  <header id="top">
+    <div id="titlebar">
+      <nav id="menubar">
+        <div class="menu" data-menu="file">File</div>
+        <div class="menu" data-menu="view">View</div>
+        <div class="menu" data-menu="favorites">Favorites</div>
+        <div class="menu" data-menu="help">Help</div>
+      </nav>
+      <div id="title-text">St. Pete AI Safety Browser</div>
+      <div id="winbtns">
+        <button data-win="min" title="Minimize"><svg viewBox="0 0 10 10"><path d="M1 8h8"/></svg></button>
+        <button data-win="max" title="Maximize"><svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7"/></svg></button>
+        <button data-win="close" class="close" title="Close"><svg viewBox="0 0 10 10"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7"/></svg></button>
+      </div>
+    </div>
+
+    <div id="toolbar">
+      <button class="tb" id="btn-back" title="Back (Alt+Left)"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span>Back</span></button>
+      <button class="tb" id="btn-forward" title="Forward (Alt+Right)"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg><span>Forward</span></button>
+      <button class="tb" id="btn-stop" title="Stop (Esc)"><svg viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Stop</span></button>
+      <button class="tb" id="btn-reload" title="Refresh (F5)"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg><span>Refresh</span></button>
+      <button class="tb" id="btn-home" title="Home (Alt+Home)"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>Home</span></button>
+      <div class="tb-sep"></div>
+      <button class="tb" id="btn-search" title="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>Search</span></button>
+      <button class="tb" id="btn-favs" title="Favorites"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><span>Favorites</span></button>
+      <button class="tb" id="btn-history" title="History (Ctrl+H)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span>History</span></button>
+      <button class="tb" id="btn-print" title="Print (Ctrl+P)"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1"/><path d="M7 14h10v7H7z"/></svg><span>Print</span></button>
+      <div class="tb-spacer"></div>
+      <button id="btn-panic" title="Get me out: closes this page, stops sound, and goes home (Ctrl+Shift+X)">
+        <svg viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M12 7v6M12 16.5v.5"/></svg>
+        <span>Get Me Out</span>
+      </button>
+      <button class="tb" id="btn-panel" title="Toggle side panel"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M15 4v16"/></svg><span>Panel</span></button>
+    </div>
+
+    <div id="addressrow">
+      <label for="address">Address</label>
+      <div id="address-wrap">
+        <span id="secure" title="Connection"></span>
+        <input id="address" spellcheck="false" autocomplete="off" placeholder="Where to? Type an address or search the road ahead">
+        <button id="btn-star" title="Add to Favorites (Ctrl+D)">☆</button>
+      </div>
+      <button id="btn-go" title="Go">Go <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+    </div>
+
+    <div id="tabstrip">
+      <div id="tabs"></div>
+      <button id="btn-newtab" title="New tab (Ctrl+T)">+</button>
+    </div>
+  </header>
+
+  <main id="body">
+    <section id="views">
+      <div id="shield" hidden>
+        <div class="shield-card">
+          <div class="shield-icon"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z"/><path d="M12 8v5M12 16v.5"/></svg></div>
+          <h1 id="shield-title">Stop. This page may be a scam.</h1>
+          <p id="shield-site"></p>
+          <ul id="shield-reasons"></ul>
+          <p id="shield-advice"></p>
+          <button id="shield-out">Get me out of here</button>
+          <button id="shield-continue">I understand the risk. Show the page anyway.</button>
+        </div>
+      </div>
+      <div id="safety-banner" hidden>
+        <span id="banner-icon">⚠</span>
+        <div><b id="banner-title"></b><div id="banner-text"></div></div>
+        <button id="banner-close" title="Dismiss">✕</button>
+      </div>
+      <div id="findbar" hidden>
+        <input id="find-input" placeholder="Find on page">
+        <span id="find-count"></span>
+        <button id="find-prev" title="Previous">▲</button>
+        <button id="find-next" title="Next">▼</button>
+        <button id="find-close" title="Close">✕</button>
+      </div>
+    </section>
+
+    <aside id="sidebar">
+      <div class="panel gauge-panel">
+        <svg id="tach" viewBox="0 0 200 170" aria-label="Load tachometer and clock">
+          <defs>
+            <radialGradient id="tach-face" cx="50%" cy="45%" r="60%">
+              <stop offset="0" stop-color="#2b2b2b"/><stop offset="1" stop-color="#050505"/>
+            </radialGradient>
+            <linearGradient id="tach-bezel" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f1f2f4"/><stop offset=".5" stop-color="#6d7178"/><stop offset="1" stop-color="#d9dbde"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="95" r="78" fill="url(#tach-bezel)"/>
+          <circle cx="100" cy="95" r="71" fill="url(#tach-face)"/>
+          <g id="tach-ticks"></g>
+          <text x="100" y="62" class="tach-label">x1000 r/min</text>
+          <g id="needle"><path d="M100 95 L100 34" stroke="#5fd0f3" stroke-width="3" stroke-linecap="round"/></g>
+          <circle cx="100" cy="95" r="8" fill="url(#tach-bezel)"/>
+          <text id="tach-clock" x="100" y="136" class="tach-clock">00:00</text>
+          <text id="tach-state" x="100" y="149" class="tach-label">IDLE</text>
+        </svg>
+      </div>
+
+      <div class="panel" id="safety-panel" data-level="home">
+        <div class="safety-head">
+          <span id="safety-light"></span>
+          <div>
+            <h3 id="safety-title">Safety Meter</h3>
+            <div id="safety-sub">Home page</div>
+          </div>
+        </div>
+        <ul id="safety-reasons"></ul>
+      </div>
+
+      <div class="panel">
+        <h3>Search the Web</h3>
+        <form id="side-search">
+          <input id="side-search-input" placeholder="Search the web">
+          <button>Ride</button>
+        </form>
+      </div>
+
+      <div class="panel grow">
+        <div class="panel-tabs">
+          <button data-ptab="favs" class="active">Favorites</button>
+          <button data-ptab="history">History</button>
+          <button data-ptab="notes">Notes</button>
+        </div>
+        <ul id="fav-list" class="ptab-body" data-ptab-body="favs"></ul>
+        <div class="ptab-body" data-ptab-body="history" hidden>
+          <ul id="history-list"></ul>
+          <button id="clear-history" class="small">Clear history</button>
+        </div>
+        <textarea id="notes" class="ptab-body" data-ptab-body="notes" hidden placeholder="Trip notes. These save as you type."></textarea>
+      </div>
+    </aside>
+  </main>
+
+  <footer id="status">
+    <span id="status-icon"></span>
+    <span id="status-text">Ready</span>
+    <div id="progress"><div></div></div>
+    <span id="zoom-level" title="Zoom (Ctrl+0 resets)">100%</span>
+    <span id="zone">Internet</span>
+  </footer>
+
+  <div id="menu-pop" hidden></div>
+
+  <div id="dl-modal" hidden>
+    <div class="dl-card" role="dialog" aria-modal="true" aria-labelledby="dl-title">
+      <h2 id="dl-title"></h2>
+      <p class="dl-file" id="dl-file"></p>
+      <div id="dl-body"></div>
+      <label id="dl-confirm-label" for="dl-confirm"></label>
+      <input id="dl-confirm" autocomplete="off" spellcheck="false">
+      <div class="dl-buttons">
+        <button id="dl-cancel" class="primary">Don't download</button>
+        <button id="dl-allow" disabled>Download anyway</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="safety-core.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>

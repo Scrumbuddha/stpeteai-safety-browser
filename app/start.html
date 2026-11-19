@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safety Home</title>
+<link rel="icon" href="favicon.png">
+<style>
+  /* St. Pete AI brand: navy, sky, bay blue, circuit gold, white · Roboto (bundled, works offline) */
+  @font-face { font-family: Roboto; src: url("fonts/roboto-variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+  :root {
+    --navy: #1d2238; --navy-2: #2a3150; --navy-deep: #151a2c; --card: #232a45; --line: rgba(95,208,243,.16);
+    --sky: #5fd0f3; --blue: #1f7fc4; --gold: #e8b84e; --white: #ffffff; --text: #dfe5f3; --muted: #9aa6c4;
+    --green: #2fbf55; --yellow: #ffb300; --red: #ff3b22;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--navy-deep); color: var(--text); font: 16px/1.55 Roboto, "Segoe UI", sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  .eyebrow { margin: 0 0 8px; font-weight: 500; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--sky); }
+  h2 { margin: 0; font-weight: 900; font-size: 30px; line-height: 1.15; color: var(--white); }
+  h2::after { content: ""; display: block; width: 56px; height: 5px; margin: 12px 0 0; border-radius: 3px; background: var(--sky); }
+  .lead { margin: 14px 0 22px; color: var(--muted); max-width: 760px; }
+  section { padding: 44px 0 8px; }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; overflow: hidden; padding: 48px 0 40px;
+    background: radial-gradient(1100px 420px at 18% 0%, #2c3762 0%, transparent 60%),
+                radial-gradient(800px 380px at 100% 100%, rgba(31,127,196,.35), transparent 60%),
+                linear-gradient(var(--navy-2), var(--navy)); border-bottom: 1px solid var(--line); }
+  .hero .traces { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .22; pointer-events: none; }
+  .hero .wrap { position: relative; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .mark { flex: none; width: 210px; height: 210px; border-radius: 50%; display: grid; place-items: center; padding: 30px 26px 34px;
+    background: radial-gradient(circle at 50% 40%, #2a3150, #1a1f34); border: 3px solid rgba(95,208,243,.55);
+    box-shadow: 0 0 0 10px rgba(95,208,243,.07), 0 18px 40px rgba(0,0,0,.45); }
+  .mark img { width: 100%; height: 100%; object-fit: contain; }
+  .hero-text { flex: 1; min-width: 300px; }
+  .hero h1 { margin: 0; font-weight: 900; font-size: 50px; line-height: 1.04; color: var(--white); letter-spacing: -.01em; }
+  .hero h1 span { color: var(--sky); }
+  .hero p.sub { margin: 14px 0 22px; font-size: 18px; color: #c5cee6; max-width: 620px; }
+  form { display: flex; max-width: 620px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,.35); }
+  form input { flex: 1; min-width: 0; height: 54px; padding: 0 18px; border: 0; font: 17px Roboto, sans-serif; color: #1d2238; outline: none; }
+  form input:focus { box-shadow: inset 0 0 0 3px var(--sky); }
+  form button { padding: 0 28px; border: 0; cursor: pointer; font: 700 17px Roboto, sans-serif; color: var(--white);
+    background: linear-gradient(var(--sky), var(--blue)); }
+  form button:hover { filter: brightness(1.08); }
+  .tagline { margin-top: 18px; font-weight: 500; font-size: 13px; letter-spacing: .3em; color: var(--muted); }
+  .tagline b { color: var(--gold); font-weight: 500; }
+
+  /* ---------- meter legend ---------- */
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .lamp { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); }
+  .lamp i { flex: none; width: 30px; height: 30px; margin-top: 2px; border-radius: 50%; border: 2px solid #0d1020;
+    background: radial-gradient(circle at 35% 30%, #fff9, transparent 45%), var(--c); box-shadow: 0 0 14px var(--c); }
+  .lamp b { display: block; font-weight: 700; font-size: 17px; color: var(--white); }
+  .lamp span { color: var(--muted); font-size: 14.5px; }
+
+  /* ---------- feature cards ---------- */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; }
+  .card { display: flex; gap: 16px; padding: 20px; border-radius: 14px; background: var(--card); border: 1px solid var(--line);
+    transition: border-color .15s, transform .15s; }
+  .card:hover { border-color: rgba(95,208,243,.45); transform: translateY(-2px); }
+  .ic { flex: none; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(145deg, var(--sky), var(--blue)); box-shadow: 0 4px 12px rgba(31,127,196,.35); }
+  .ic.alert { background: linear-gradient(145deg, #ff6a4d, #b0180a); box-shadow: 0 4px 12px rgba(176,24,10,.35); }
+  .ic svg { width: 24px; height: 24px; fill: none; stroke: var(--white); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+  .card h3 { margin: 0 0 4px; font-weight: 700; font-size: 18px; color: var(--white); }
+  .card p { margin: 0; color: #c5cee6; font-size: 14.5px; }
+  .card .see { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+  .card .see b { color: var(--sky); font-weight: 500; }
+
+  /* ---------- panic callout ---------- */
+  .panic { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-top: 30px; padding: 22px 24px; border-radius: 14px;
+    background: linear-gradient(90deg, #3d0d0a, #231321); border: 1px solid #7a1a10; }
+  .panic .btn { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 14px; border-radius: 9px; border: 1px solid #000;
+    background: linear-gradient(#e2412c, #b0180a 55%, #7d0e04); color: #fff; font-weight: 700; font-size: 12px; flex: none; }
+  .panic .btn svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .panic div { flex: 1; min-width: 260px; color: #e9d6d6; }
+  .panic b { font-weight: 700; font-size: 19px; color: #fff; }
+
+  /* ---------- rules ---------- */
+  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px 30px; counter-reset: r; margin: 0; padding: 0; list-style: none; }
+  .rules li { position: relative; padding: 12px 0 12px 54px; border-bottom: 1px solid var(--line); }
+  .rules li::before { counter-increment: r; content: counter(r); position: absolute; left: 0; top: 10px; width: 36px; height: 36px;
+    border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 17px; color: var(--navy); background: var(--gold); }
+  .rules b { color: var(--white); font-weight: 700; }
+
+  /* ---------- links + keys ---------- */
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0 24px; }
+  .col h3 { margin: 0 0 8px; font-weight: 500; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--sky); }
+  .col a { display: block; padding: 7px 0; text-decoration: none; border-bottom: 1px solid var(--line); }
+  .col a:hover { color: var(--white); }
+  .col a::after { content: " →"; color: var(--gold); opacity: 0; transition: opacity .15s; }
+  .col a:hover::after { opacity: 1; }
+  kbd { display: inline-block; min-width: 24px; padding: 1px 7px; border: 1px solid #3a4468; border-bottom-width: 2px; border-radius: 4px;
+    background: var(--navy); color: var(--white); font: 500 12.5px Roboto, sans-serif; text-align: center; }
+  .keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 24px; color: var(--muted); font-size: 14.5px; }
+
+  footer { margin-top: 48px; padding: 30px 0 40px; border-top: 1px solid var(--line); background: var(--navy); }
+  footer .wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+  footer img { width: 54px; height: auto; }
+  footer b { color: var(--white); font-weight: 700; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .hero h1 { font-size: 36px; }
+    .mark { width: 150px; height: 150px; padding: 22px 18px 24px; }
+    .features, .rules { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <svg class="traces" viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g fill="none" stroke="#e8b84e" stroke-width="2">
+        <path d="M0 70 H220 L270 120 H520"/><circle cx="526" cy="120" r="6"/>
+        <path d="M0 300 H160 L210 250 H380"/><circle cx="386" cy="250" r="6"/>
+        <path d="M1200 60 H1000 L950 110 H820"/><circle cx="814" cy="110" r="6"/>
+      </g>
+      <g fill="none" stroke="#5fd0f3" stroke-width="2">
+        <path d="M1200 290 H1040 L990 240 H900"/><circle cx="894" cy="240" r="6"/>
+        <path d="M60 0 V40 L100 80 V160"/><circle cx="100" cy="166" r="6"/>
+        <path d="M1140 360 V320 L1100 280"/><circle cx="1096" cy="276" r="6"/>
+      </g>
+    </svg>
+    <div class="wrap">
+      <div class="mark"><img src="logo.png" alt="St. Pete AI heron"></div>
+      <div class="hero-text">
+        <p class="eyebrow">St. Pete AI · Safety Browser</p>
+        <h1>Browse with confidence.<br><span>We watch for scams.</span></h1>
+        <p class="sub">Every page you open is checked for fake websites, phishing, fake virus warnings and payment pressure, before a scam can reach you.</p>
+        <form action="https://duckduckgo.com/" method="get">
+          <input name="q" placeholder="Search the web…" aria-label="Search the web" autofocus>
+          <button>Search</button>
+        </form>
+        <div class="tagline">AI EDUCATION <b>·</b> ETHICS <b>·</b> COMMUNITY</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section>
+      <p class="eyebrow">At a glance</p>
+      <h2>Your Safety Meter</h2>
+      <p class="lead">Check the light in the right-hand panel on any page. The address bar outline changes color to match.</p>
+      <div class="legend">
+        <div class="lamp" style="--c: var(--green)"><i></i><div><b>Green: Looks OK</b><span>No warning signs, and not on the list of known phishing sites.</span></div></div>
+        <div class="lamp" style="--c: var(--yellow)"><i></i><div><b>Yellow: Be careful</b><span>Something is off, like a brand-new website, no padlock, or pressure to pay. Read the reasons first.</span></div></div>
+        <div class="lamp" style="--c: var(--red)"><i></i><div><b>Red: Danger</b><span>Strong signs of a scam. A stop screen covers the page before it can do harm.</span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <p class="eyebrow">Always on</p>
+      <h2>What the Safety Browser protects you from</h2>
+      <p class="lead">These protections run automatically. There is nothing to set up.</p>
+      <div class="features">
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 12l4-4M4 12l4 4"/><path d="M14 6h6v12h-6"/></svg></div>
+          <div><h3>Fake website addresses</h3>
+            <p>Spots look-alike addresses such as <b>paypa1.com</b>, <b>amaz0n-billing.com</b> or a fake <b>irs-refund</b> site, plus hidden-letter and "@" tricks.</p>
+            <p class="see">You'll see: <b>a stop screen that names the real site</b>, before the fake one loads.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div><h3>Known phishing sites</h3>
+            <p>Every address is checked against a list of active phishing sites from OpenPhish, refreshed every 6 hours. The check happens on your computer, so nobody sees where you browse.</p>
+            <p class="see">You'll see: <b>"on a list of known phishing sites"</b> and a stop screen.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4M12 7v4M12 13v.5"/></svg></div>
+          <div><h3>Fake virus warnings</h3>
+            <p>Catches "your computer is locked, call Microsoft" pages. Stops them from taking over your screen, silences endless pop-ups and mutes alarm sounds.</p>
+            <p class="see">You'll see: <b>"Fake virus warning. Do not call."</b></p></div></div>
+
+        <div class="card"><div class="ic alert"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="12" height="9" rx="1"/><path d="M5 16h6M8 13v3"/><path d="M17 8l5 5M22 8l-5 5"/></svg></div>
+          <div><h3>Remote-control programs</h3>
+            <p>Holds downloads of AnyDesk, TeamViewer, ScreenConnect and about 20 similar tools that scammers use to take over computers and bank accounts.</p>
+            <p class="see">You'll see: <b>a warning that needs "I KNOW THIS PERSON" typed</b> to continue.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></div>
+          <div><h3>Risky program downloads</h3>
+            <p>Pauses any program file (.exe, .msi and similar) so a fake "update" or "video player" can't slip onto your computer.</p>
+            <p class="see">You'll see: <b>a check that needs "INSTALL" typed</b> to continue.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+          <div><h3>Payment pressure</h3>
+            <p>Notices when a page pushes gift cards, crypto, Bitcoin ATMs or wire transfers together with threats or deadlines like "final notice" or "arrest".</p>
+            <p class="see">You'll see: <b>a yellow banner</b>, or a stop screen when the pressure is strong.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <div><h3>Password &amp; card guard</h3>
+            <p>Warns you before you type a password, card number, bank details or Social Security number on a page that isn't encrypted or shows warning signs.</p>
+            <p class="see">You'll see: <b>"Stop before you type"</b> above the page.</p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div>
+          <div><h3>Brand-new websites</h3>
+            <p>Checks how old a website is. Fake shops and copied sign-in pages are usually only days old and disappear soon after.</p>
+            <p class="see">You'll see: <b>"This website was created 4 days ago."</b></p></div></div>
+
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg></div>
+          <div><h3>Your trusted sites</h3>
+            <p>Sites you save in your <b>Favorites</b> are marked as trusted. Open your bank from there, not from emails, texts or search ads.</p>
+            <p class="see">You'll see: <b>"This site is in your Favorites."</b></p></div></div>
+
+      </div>
+
+      <div class="panic">
+        <span class="btn"><svg viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M12 7v6M12 16.5v.5"/></svg>Get Me Out</span>
+        <div><b>Feeling rushed, scared or unsure? Press the red Get Me Out button.</b><br>
+          It's at the top right of the toolbar, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>. It closes the page, stops any sound and brings you back here. Nothing on that page can stop it.</div>
+      </div>
+    </section>
+
+    <section>
+      <p class="eyebrow">Good habits</p>
+      <h2>Six rules that stop most scams</h2>
+      <p class="lead">Software catches a lot. These habits catch the rest, including scams that arrive by phone or text.</p>
+      <ol class="rules">
+        <li><b>Real companies never ask for gift cards, crypto or wire transfers.</b> Not the IRS, Medicare, your bank or the police.</li>
+        <li><b>Pop-ups with phone numbers are always fake.</b> Microsoft and Apple don't put phone numbers in warnings. Don't call.</li>
+        <li><b>Never let a stranger control your computer.</b> If a caller asks you to install a program, hang up.</li>
+        <li><b>Go to your bank yourself.</b> Use your Favorites or type the address. Don't use links in emails, texts or ads.</li>
+        <li><b>Rushing means stop.</b> "Act now" and "don't tell anyone" are scam signs. Hang up and call someone you trust.</li>
+        <li><b>Have a family safe word.</b> AI can fake a loved one's voice. Ask for the word before sending money in an "emergency". Keep it in Notes.</li>
+      </ol>
+    </section>
+
+    <section>
+      <p class="eyebrow">Quick links</p>
+      <h2>Helpful places</h2>
+      <div class="cols" style="margin-top:22px">
+        <div class="col"><h3>Report a scam</h3><a href="https://reportfraud.ftc.gov/">FTC: ReportFraud.ftc.gov</a><a href="https://www.ic3.gov/">FBI Internet Crime Center</a><a href="https://www.aarp.org/money/scams-fraud/helpline/">AARP Fraud Watch helpline</a></div>
+        <div class="col"><h3>News</h3><a href="https://apnews.com/">AP News</a><a href="https://www.npr.org/">NPR</a><a href="https://www.reuters.com/">Reuters</a></div>
+        <div class="col"><h3>Weather &amp; maps</h3><a href="https://www.weather.gov/">National Weather Service</a><a href="https://www.openstreetmap.org/">OpenStreetMap</a></div>
+        <div class="col"><h3>Learn</h3><a href="https://www.wikipedia.org/">Wikipedia</a><a href="https://archive.org/">Internet Archive</a></div>
+      </div>
+    </section>
+
+    <section id="about">
+      <p class="eyebrow">Shortcuts</p>
+      <h2>Handy keys</h2>
+      <div class="keys" style="margin-top:22px">
+        <div><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> Get Me Out</div>
+        <div><kbd>Ctrl</kbd>+<kbd>T</kbd> New tab · <kbd>Ctrl</kbd>+<kbd>W</kbd> Close tab</div>
+        <div><kbd>Ctrl</kbd>+<kbd>D</kbd> Save to Favorites</div>
+        <div><kbd>Ctrl</kbd>+<kbd>F</kbd> Find on page</div>
+        <div><kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>-</kbd> Bigger / smaller text</div>
+        <div><kbd>Alt</kbd>+<kbd>←</kbd> Back</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <img src="logo.png" alt="">
+      <div><b>St. Pete AI Safety Browser</b><br>A community project of St. Pete AI · AI education, ethics &amp; community in Saint Petersburg, Florida.</div>
+    </div>
+  </footer>
+</body>
+</html>
